@@ -45,6 +45,7 @@ export default
 			"exchange_refresh_rate": 60,
 			"commission_percentage": 5,
 			"minimum_commission": 2.5,
+			"surcharge": 2,
 			"low_balance_percentage": 25
 		}
 	}

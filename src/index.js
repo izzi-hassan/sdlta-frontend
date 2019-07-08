@@ -9,8 +9,7 @@ import theme from './themes';
 
 import { Provider } from 'react-redux'
 import store from './store'
-import createSagaMiddleware from 'redux-saga';
-import { BrowserRouter } from 'react-router-dom';
+//import { BrowserRouter } from 'react-router-dom';
 
 import App from './components/App';
 
@@ -25,3 +24,5 @@ ReactDOM.render(
     </ThemeProvider>,
     root,
   );
+
+serviceWorker.unregister();

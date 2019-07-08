@@ -1,13 +1,16 @@
 ## Assumptions I've made ##
-- One FLA (Front-Line Agent) uses a single instance of the application rather than multiple windows
-- Currency codes are validly formatted (there is no need to trim and lowercase for comparison)
-- The Home Currency is the standard trading medium. Customers will either give us Home Currency to purchase other currency, or give us other currency to purchase Home Currency. Customers purchasing Home Currency is the same as them selling some other currency and receiving Home Currency in return
+- One FLA (Front-Line Agent) uses a single instance of the application rather than multiple windows.
+- Currency codes are validly formatted (there is no need to trim and lowercase for comparison).
+- The Home Currency is the standard trading medium. Customers will either give us Home Currency to purchase other currency, or give us other currency to purchase Home Currency. Customers purchasing Home Currency is the same as them selling some other currency and receiving Home Currency in return.
+- I am also assuming that all currency codes are three digits
 
 ## Things I haven't fully implemented or accounted for ##
-- Authentication / Authorization (Admin / FLAs)
-- Ability to switch themes
+- Authentication / Authorization (Admin / FLAs).
+- Ability to switch themes.
 - Multiple instances of the app running in a single office with shared currency amounts
-- - I would expect this to be handled on the backend
+- - I would expect this to be handled on the backend.
+- Not handling the case when there is an API fetch happening with a rate refresh while a transaction is being processed. Once an agent initiates a transaction, the exchange rate at that instance is used. This is a real world observation but also trying to simplify in the interest of not spending too much time on this assignment.
+- I had added a logging mechanism to store past transactions in the state but I'm removing it for simplicity
 
 ## Create React App README ## 
 

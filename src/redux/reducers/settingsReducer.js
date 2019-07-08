@@ -5,6 +5,7 @@ const initialState = {
     "exchange_refresh_rate": null,
     "commission_percentage": null,
     "minimum_commission": null,
+    "surcharge": null,
     "low_balance_percentage": null
 };
 
