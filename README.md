@@ -1,3 +1,16 @@
+## Assumptions I've made ##
+- One FLA (Front-Line Agent) uses a single instance of the application rather than multiple windows
+- Currency codes are validly formatted (there is no need to trim and lowercase for comparison)
+- The Home Currency is the standard trading medium. Customers will either give us Home Currency to purchase other currency, or give us other currency to purchase Home Currency. Customers purchasing Home Currency is the same as them selling some other currency and receiving Home Currency in return
+
+## Things I haven't fully implemented or accounted for ##
+- Authentication / Authorization (Admin / FLAs)
+- Ability to switch themes
+- Multiple instances of the app running in a single office with shared currency amounts
+- - I would expect this to be handled on the backend
+
+## Create React App README ## 
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
