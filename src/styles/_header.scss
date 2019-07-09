@@ -1,0 +1,19 @@
+header  {
+    flex-grow: 1;
+    .title {
+        flex-grow: 1;
+    }
+
+    padding: 1rem 0;
+
+    img {
+        max-height: 50px;
+    }
+
+    a {
+        text-decoration: none;
+        button {
+            font-size: 1em;
+        }
+    }
+}

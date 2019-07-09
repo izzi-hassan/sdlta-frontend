@@ -1,0 +1,8 @@
+export const INIT = "INIT";
+export const UPDATE_RATES = "UPDATE_RATES";
+export const RATE_ERROR = "RATE_ERROR";
+export const FETCHING_RATES = "FETCHING_RATES";
+export const DONE_FETCHING = "DONE_FETCHING";
+export const UPDATE_SETTINGS = "UPDATE_SETTINGS";
+export const DO_TRANSACTION = "DO_TRANSACTION";
+export const LOG_TRANSACTION = "LOG_TRANSACTION";
