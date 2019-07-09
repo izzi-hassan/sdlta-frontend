@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
+import { connectRouter } from 'connected-react-router';
 
 import settingsReducer from './settingsReducer';
 import currencyReducer from './currencyReducer';
-import transactionsReducer from './transactionsReducer';
 
-export default combineReducers({
+export default (history) => combineReducers({
+    router: connectRouter(history),
     settings: settingsReducer,
-    currencies: currencyReducer,
-    transactions: transactionsReducer
+    currencies: currencyReducer
 });

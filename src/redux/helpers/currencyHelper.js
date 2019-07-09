@@ -10,9 +10,7 @@ const {
 } = config;
 
 // Reduce currencyList to the traded currencies
-currencies = currencies.filter(currency => tradedCurrencies.some(x => x.code === currency.code));
-
-export const currencyList = currencies;
+export const currencyList = currencies.filter(currency => tradedCurrencies.some(x => x.code === currency.code));
 
 export const calculateTransactionEffect = (transaction) => {
     const {

@@ -1,12 +1,12 @@
 export default
 	{
-		"app_short_name": "sdlta-frontend",
-		"app_full_name": "SDLTA Frontend Challenge",
+		"app_short_name": "Frontend Challenge",
+		"app_full_name": "Self Decode Frontend Challenge",
 		"home_currency_code": "USD",
 		"exchange_rate_source_currency_code": "USD",
 		"currency_precision": 2,
 		"exchange_rate_precision": 4,
-		"exchange_rate_stochasticity": 1.5,
+		"exchange_rate_stochasticity": 0.1,
 		"traded_currencies": [
 			{
 				"code": "USD",
@@ -42,7 +42,8 @@ export default
 			}
 		],
 		"defaults": {
-			"exchange_refresh_rate": 60,
+			"margin_percentage": 2,
+			"exchange_refresh_rate": 0,
 			"commission_percentage": 5,
 			"minimum_commission": 2.5,
 			"surcharge": 2,

@@ -1,5 +1,5 @@
 import { INIT, DO_TRANSACTION, UPDATE_RATES, FETCHING_RATES, RATE_ERROR } from '../actions/actionTypes';
-import { calculateTransactionResult, currencyList } from '../helpers/currencyHelper';
+import { calculateTransactionEffect, currencyList } from '../helpers/currencyHelper';
 import config from '../../config/app';
 
 const {
@@ -18,9 +18,20 @@ const initialState = {
 export default (state = initialState, action) => {
     switch (action.type) {
         case INIT: {
+            let currencies = {};
+            for (var key in currencyList) {
+                currencies[currencyList[key].code] = currencyList[key];
+            }
+
+            const tradedCurrencies = config.traded_currencies;
+            for (key in tradedCurrencies) {
+                currencies[tradedCurrencies[key].code].initial_balance = tradedCurrencies[key].initial_balance;
+                currencies[tradedCurrencies[key].code].balance = tradedCurrencies[key].initial_balance;
+            }
+
             let nextState = {
                 ...state,
-                currencies: currencyList,
+                currencies: currencies,
                 isFetching: false, 
                 rateRefreshError: false, 
                 canTransact: false
@@ -35,7 +46,7 @@ export default (state = initialState, action) => {
             }
 
             // Calcule changes in currency balances as well as commission
-            let result = calculateTransactionResult(transaction);
+            let result = calculateTransactionEffect(transaction);
 
             if (! result) {
                 return state;
@@ -72,17 +83,24 @@ export default (state = initialState, action) => {
         }
         case UPDATE_RATES: {
             let nextState = {...state, isFetching: false, rateRefreshError: false};
-            const rates = action.payload.quotes;
+            const fetchedRates = action.payload.quotes;
 
-            for (var key in rates) {
+            for (key in fetchedRates) {
                 let otherCurrencyCode = key.substr(-3);
-                nextState[otherCurrencyCode].exchangeRate = rates[key] + ((Math.random() * exchangeRateStochasticity * 2 - exchangeRateStochasticity) * rates[key]);  //Adding stochasticity
+
+                nextState.currencies[otherCurrencyCode].exchangeRate = fetchedRates[key];
+
+                // Add stochasticity
+                if (otherCurrencyCode !== homeCurrencyCode) {
+                    nextState.currencies[otherCurrencyCode].exchangeRate += ((Math.random() * exchangeRateStochasticity * 2 - exchangeRateStochasticity) * fetchedRates[key]);
+                }
             }
 
             return nextState;
         }
         case RATE_ERROR: {
             let nextState = {...state, isFetching: false, rateRefreshError: true, canTransact: false}
+            console.log('Rate Refresh Error', action.payload)
             return nextState;
         }
         default: {
