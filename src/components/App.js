@@ -69,11 +69,11 @@ class App extends React.Component {
                 { this.state.showLoading ? <Loading /> : null }
                 <Container component="main" className="main-container" maxWidth="md">
                     <Header history={this.props.history} />
-                    <SnackbarContent
-                        className="error-message"
-                        message="Rate Refresh is Disabled!"
-                    >
-                    </SnackbarContent>
+                    {this.state.rateRefreshId === null ? <SnackbarContent className="error-message"
+                            message="Rate Refresh is Disabled!"
+                        ></SnackbarContent >: null}
+
+                    
                     <ConnectedRouter history={this.props.history} context={this.props.context}>
                         <Switch>
                             <Route exact path="/" component={Home} />
