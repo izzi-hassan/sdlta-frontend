@@ -1,12 +1,26 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
 import * as serviceWorker from './serviceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider, ReactReduxContext } from 'react-redux';
+import store, { history } from './redux';
+import config from './config/app';
 
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
+import App from './components/App';
+
+// Init Redux Store
+const root = document.getElementById('root');
+
+ReactDOM.render(
+    <div>
+        <Provider store={store} context={ReactReduxContext}>
+            <App history={history} context={ReactReduxContext} />
+        </Provider>
+    </div>,
+    root
+);
+
+// Set Title
+document.getElementsByTagName('title')[0].innerHTML = config.app_full_name;
+
 serviceWorker.unregister();

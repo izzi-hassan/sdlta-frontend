@@ -1,0 +1,18 @@
+export const INIT = "INIT";
+export const LOADING = "LOADING";
+export const LOADED = "LOADED";
+
+export const UPDATE_RATES = "UPDATE_RATES";
+export const RATE_ERROR = "RATE_ERROR";
+export const FETCHING_RATES = "FETCHING_RATES";
+export const DONE_FETCHING = "DONE_FETCHING";
+
+export const UPDATE_SETTINGS = "UPDATE_SETTINGS";
+
+export const DO_TRANSACTION = "DO_TRANSACTION";
+export const TRANSACTION_SUCCESS = "TRANSACTION_SUCCESS";
+export const TRANSACTION_FAILURE = "TRANSACTION_FAILURE";
+//export const LOG_TRANSACTION = "LOG_TRANSACTION";
+
+export const SHOW_MESSAGE = "SHOW_MESSAGE";
+export const HIDE_MESSAGE = "HIDE_MESSAGE";
