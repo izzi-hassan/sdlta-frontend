@@ -2,11 +2,13 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ConnectedRouter } from 'connected-react-router';
 
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import Button from '@material-ui/core/Button';
-import Hidden from '@material-ui/core/Hidden';
+import { 
+  AppBar,
+  Toolbar,
+  Typography,
+  Button,
+  Hidden
+} from '@material-ui/core';
 
 import config from '../config/app';
 import logo from '../assets/logo.svg';
@@ -23,7 +25,7 @@ class Header extends React.Component {
               <Hidden smDown>
                 {config.app_full_name}
               </Hidden>
-              <Hidden mdUp>
+              <Hidden mdUp xsDown>
                 {config.app_short_name}
               </Hidden>
             </Typography>

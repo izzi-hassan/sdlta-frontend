@@ -14,7 +14,16 @@
 - Not handling the case when there is an API fetch happening with a rate refresh while a transaction is being processed. Once an agent initiates a transaction, the exchange rate at that instance is used. This is a real world observation but also trying to simplify in the interest of not spending too much time on this assignment.
 - I had added a logging mechanism to store past transactions in the state but I'm removing it for simplicity
 - Loading dialogs or hiding elements while data is being fetched or loaded
-- I don't have time to add PropTypes or Validation
+- I don't have time to add PropTypes or Validate Input
+- I am formatting currency with commas using toLocaleString. There are other formatting considerations based on home currency we need to take into account
+- We can use symbols. I'm storing the symbol information for each currency but not using it
+- Auto-focus and auto-clear
+- Transactions should be disabled while one is completing
+- CanTransact could be more elegant 
+- I'm using toPrecision rather than using a library to handle my calculations or creating my own functions.
+- Keyboard controls like submit form
+- I have not handled RateErrors (An error when fetching new rates)
+- I have not handled Low Balance Errors (It still says success even when a transaction cannot be executed)
 
 ## Issues I couldn't figure out
 - For some reason [withRouter] was not working so I had to use [connected-react-router]

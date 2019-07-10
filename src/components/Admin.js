@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { init, updateSettings } from '../redux/actions';
+import { updateSettings } from '../redux/actions';
 
-import { Paper, TextField, InputAdornment, Button } from '@material-ui/core';
+import { Container, Paper, TextField, InputAdornment, Button } from '@material-ui/core';
 import config from '../config/app';
 
 
@@ -18,20 +18,18 @@ class Admin extends React.Component {
             margin_percentage: ''
         };
 
-        this.handleChange = this.handleChange.bind(this)
+        if (props.exchange_refresh_rate !== null) {
+            this.state = {...this.state, ...props};
+        }
+
+        console.log(this.state);
+
+        this.handleChange = this.handleChange.bind(this);
     };
 
-    componentDidMount() {
-        this.handleInit();
-    };
-  
     componentWillReceiveProps(nextProps) {
-        this.setState(nextProps.settings);
-  }
-
-    handleInit = () => {
-        this.props.init();
-    };
+        this.setState({ ...nextProps });
+    }
 
     updateSettings = () => {
         this.props.updateSettings(this.state);
@@ -45,78 +43,83 @@ class Admin extends React.Component {
 
     render () {
         return (
-            <Paper>
-                <TextField
-                    label="Refresh Currency Rate"
-                    id="exchange_refresh_rate"
-                    value={this.state.exchange_refresh_rate}
-                    onChange={this.handleChange}
-                    InputProps={{
-                        endAdornment: <InputAdornment position="end">Seconds</InputAdornment>,
-                    }}
-                />
+            <Paper className="content-container">
+                <Container className="settings-form-container">
+                    <TextField
+                        label="Refresh Currency Rate"
+                        id="exchange_refresh_rate"
+                        value={this.state.exchange_refresh_rate}
+                        onChange={this.handleChange}
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end">Seconds</InputAdornment>,
+                        }}
+                        required={true}
+                    />
 
-                <br />
+                    <br />
 
-                <TextField
-                    label="Commission Rate"
-                    id="commission_percentage"
-                    value={this.state.commission_percentage}
-                    onChange={this.handleChange}
-                    InputProps={{
-                        endAdornment: <InputAdornment position="end">%</InputAdornment>,
-                    }}
-                />
-                
-                <br />
+                    <TextField
+                        label="Commission Rate"
+                        id="commission_percentage"
+                        value={this.state.commission_percentage}
+                        onChange={this.handleChange}
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                        }}
+                        required={true}
+                    />
+                    
+                    <br />
 
-                <TextField
-                    label="Surcharge"
-                    id="surcharge"
-                    value={this.state.surcharge}
-                    onChange={this.handleChange}
-                    InputProps={{
-                        endAdornment: <InputAdornment position="end">{config.home_currency_code}</InputAdornment>,
-                    }}
-                />
-                
-                <br />
+                    <TextField
+                        label="Surcharge"
+                        id="surcharge"
+                        value={this.state.surcharge}
+                        onChange={this.handleChange}
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end">{config.home_currency_code}</InputAdornment>,
+                        }}
+                        required={true}
+                    />
+                    
+                    <br />
 
-                <TextField
-                    label="Minimum Commission"
-                    id="minimum_commission"
-                    value={this.state.minimum_commission}
-                    onChange={this.handleChange}
-                    InputProps={{
-                        endAdornment: <InputAdornment position="end">{config.home_currency_code}</InputAdornment>,
-                    }}
-                />
-                
-                <br />
+                    <TextField
+                        label="Minimum Commission"
+                        id="minimum_commission"
+                        value={this.state.minimum_commission}
+                        onChange={this.handleChange}
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end">{config.home_currency_code}</InputAdornment>,
+                        }}
+                        required={true}
+                    />
+                    
+                    <br />
 
-                <TextField
-                    label="Exchange Rate Margin"
-                    id="margin_percentage"
-                    value={this.state.margin_percentage}
-                    onChange={this.handleChange}
-                    InputProps={{
-                        endAdornment: <InputAdornment position="end">%</InputAdornment>,
-                    }}
-                />
-                
-                <br />
-                <br />
-                
-                <Button onClick={this.updateSettings}>Update Settings</Button>
+                    <TextField
+                        label="Exchange Rate Margin"
+                        id="margin_percentage"
+                        value={this.state.margin_percentage}
+                        onChange={this.handleChange}
+                        InputProps={{
+                            endAdornment: <InputAdornment position="end">%</InputAdornment>,
+                        }}
+                        required={true}
+                    />
+                    
+                    <br />
+                    <br />
+                    
+                    <Button onClick={this.updateSettings}>Update Settings</Button>
+                </Container>
             </Paper>
         );
     };
 };
 
 const mapStateToProps = state => {
-    return {
-        settings: state.settings
-    };
+    return state.settings;
 };
 
-export default connect(mapStateToProps, { init, updateSettings })( Admin );
+export default connect(mapStateToProps, { updateSettings })( Admin );

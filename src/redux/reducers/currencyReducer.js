@@ -9,10 +9,11 @@ const {
 
 const initialState = {
     currencies: {},
-    lastTransaction: null,
+    lastTransaction: {
+        success: false
+    },
     isFetching: null,
-    rateRefreshError: null,
-    canTransact: null
+    rateRefreshError: null
 };
 
 export default (state = initialState, action) => {
@@ -25,56 +26,48 @@ export default (state = initialState, action) => {
 
             const tradedCurrencies = config.traded_currencies;
             for (key in tradedCurrencies) {
-                currencies[tradedCurrencies[key].code].initial_balance = tradedCurrencies[key].initial_balance;
-                currencies[tradedCurrencies[key].code].balance = tradedCurrencies[key].initial_balance;
+                let tradedCurr = tradedCurrencies[key];
+                let curr = currencies[tradedCurr.code]
+                curr.initial_balance = tradedCurr.initial_balance;
+                curr.balance = tradedCurr.initial_balance;
             }
-
-            let nextState = {
+           return {
                 ...state,
                 currencies: currencies,
                 isFetching: false, 
                 rateRefreshError: false, 
                 canTransact: false
             }
-            return nextState;
         }
         case DO_TRANSACTION: {
-            const transaction = action.payload;
-
-            if (! state.canTransact) {
-                return state;
-            }
+            const transaction = action.payload.transaction;
 
             // Calcule changes in currency balances as well as commission
             let result = calculateTransactionEffect(transaction);
 
             if (! result) {
-                return state;
+                return { ...state, lastTransaction: { success: false } };
             }
 
             // Update Balances
-            let transactionCurrencyState = state[transaction.currencyCode];
-            transactionCurrencyState.balance += result.transactionCurrencyBalanceChange;
+            let transactionCurrencyState = { ...state.currencies[transaction.code] };
+            transactionCurrencyState.balance = Number.parseFloat(transactionCurrencyState.balance) + Number.parseFloat(result.transactionCurrencyBalanceChange);
+            
+            let homeCurrencyState = { ...state.currencies[homeCurrencyCode] };
+            homeCurrencyState.balance = Number.parseFloat(homeCurrencyState.balance) + Number.parseFloat(result.homeCurrencyBalanceChange);
 
-            let homeCurrencyState = state[homeCurrencyCode];
-            // Commission always goes into the home currency balance
-            homeCurrencyState.balance += result.homeCurrencyBalanceChange + result.commission;
-
-            // Apply commission and calculate payout / receipt of funds
-            if (transaction.buying) {
-                transaction.payout = transaction.amount;                                                //paying out Other Currency
-                transaction.receipt = result.homeCurrencyBalanceChange;
-            } else {
-                transaction.payout = Math.abs(result.homeCurrencyBalanceChange) - result.commission;    //paying out Home Currency
-                transaction.receipt = transaction.amount;
+            if (homeCurrencyState.balance < 0 || transactionCurrencyState.balance < 0) {
+                return { ...state, lastTransaction: { success: false } };
             }
 
-            let nextState = {
-                ...state,
-                lastTransaction: transaction,
-                [transaction.currencyCode]: transactionCurrencyState,
-                [homeCurrencyCode]: homeCurrencyState
-            };
+            transactionCurrencyState.balance = transactionCurrencyState.balance.toFixed(config.currency_precision);
+            homeCurrencyState.balance = homeCurrencyState.balance.toFixed(config.currency_precision);
+
+            let nextState = { ...state };
+            nextState.lastTransaction = transaction;
+            nextState.lastTransaction.success = true;
+            nextState.currencies[transaction.code] = transactionCurrencyState;
+            nextState.currencies[homeCurrencyCode] = homeCurrencyState;
 
             return nextState;
         }
@@ -88,20 +81,18 @@ export default (state = initialState, action) => {
             for (key in fetchedRates) {
                 let otherCurrencyCode = key.substr(-3);
 
-                nextState.currencies[otherCurrencyCode].exchangeRate = fetchedRates[key];
+                nextState.currencies[otherCurrencyCode].exchangeRate = 1 / fetchedRates[key];
 
                 // Add stochasticity
                 if (otherCurrencyCode !== homeCurrencyCode) {
-                    nextState.currencies[otherCurrencyCode].exchangeRate += ((Math.random() * exchangeRateStochasticity * 2 - exchangeRateStochasticity) * fetchedRates[key]);
+                    nextState.currencies[otherCurrencyCode].exchangeRate += (Math.random() - 0.5) * exchangeRateStochasticity * (1 / fetchedRates[key]);
                 }
             }
 
             return nextState;
         }
         case RATE_ERROR: {
-            let nextState = {...state, isFetching: false, rateRefreshError: true, canTransact: false}
-            console.log('Rate Refresh Error', action.payload)
-            return nextState;
+            return {...state, isFetching: false, rateRefreshError: true, canTransact: false}
         }
         default: {
             return state;
