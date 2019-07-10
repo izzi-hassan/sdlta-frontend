@@ -5,7 +5,6 @@ import currencies from '../../config/currencies';
 
 const {
     currency_precision: currencyPrecision,
-    exchange_rate_precision: exchangeRatePrecision,
     traded_currencies: tradedCurrencies
 } = config;
 
@@ -25,17 +24,17 @@ export const calculateTransactionEffect = (transaction) => {
     const operator = (buying) ? -1 : 1;
 
     let transactionCurrencyBalanceChange = operator * amount;
-    transactionCurrencyBalanceChange = transactionCurrencyBalanceChange.toPrecision(currencyPrecision);
+    let homeCurrencyBalanceChange =  -1 * operator * amount * exchangeRate;
 
-    let homeCurrencyBalanceChange =  operator * amount * exchangeRate.toPrecision(exchangeRatePrecision);
-    homeCurrencyBalanceChange = homeCurrencyBalanceChange.toPrecision(currencyPrecision);
+    let commission = Math.max(Math.abs(homeCurrencyBalanceChange) * commissionRate / 100 + surchargeAmount, minCommissionAmount);
 
-    let commission = Math.max(Math.abs(homeCurrencyBalanceChange) * commissionRate + surchargeAmount, minCommissionAmount);
-    commission = commission.toPrecision(currencyPrecision);
+    // Commission always goes into the home currency balance
+    homeCurrencyBalanceChange += commission;
 
     return {
-        transactionCurrencyBalanceChange: transactionCurrencyBalanceChange,
-        homeCurrencyBalanceChange: homeCurrencyBalanceChange,
-        commission: commission
+        transactionCurrencyBalanceChange: transactionCurrencyBalanceChange.toFixed(currencyPrecision),
+        homeCurrencyBalanceChange: homeCurrencyBalanceChange.toFixed(currencyPrecision),
+        commission: commission.toFixed(currencyPrecision),
+        payReceiveAmount: Math.abs(homeCurrencyBalanceChange.toFixed(currencyPrecision))
     };
 };
