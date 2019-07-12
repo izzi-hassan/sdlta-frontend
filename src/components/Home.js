@@ -86,13 +86,18 @@ const mapStateToProps = state => {
     
     for (var i in curr) {
         if (curr[i].exchangeRate !== 1){
-            curr[i].buyRate = (curr[i].exchangeRate * (100 + state.settings.margin_percentage) / 100).toPrecision(config.exchange_rate_precision);
-            curr[i].sellRate = (curr[i].exchangeRate * (100 - state.settings.margin_percentage) / 100).toPrecision(config.exchange_rate_precision);
+            curr[i].buyRate = curr[i].exchangeRate + curr[i].exchangeRate * state.settings.margin_percentage / 100;
+            curr[i].sellRate = curr[i].exchangeRate + curr[i].exchangeRate * state.settings.margin_percentage / 100;
         } else {
             curr[i].buyRate = 1;
             curr[i].sellRate = 1;
         }
+
+        console.log(curr[i]);
         
+        curr[i].buyRate = curr[i].buyRate.toPrecision(config.exchange_rate_precision);
+        curr[i].sellRate = curr[i].sellRate.toPrecision(config.exchange_rate_precision);
+
         if (curr[i].balance <= curr[i].initial_balance * config.low_balance_percentage / 100) {
             curr[i].lowBalanceClass = 'low-balance';
         } else {
