@@ -14,7 +14,6 @@ import config from '../config/app';
 import logo from '../assets/logo.svg';
 
 class Header extends React.Component {
-
   render() {
     return (
       <div className="header">

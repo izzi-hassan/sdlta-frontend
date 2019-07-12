@@ -2,7 +2,7 @@
 import { INIT, LOADING, LOADED, SHOW_MESSAGE, HIDE_MESSAGE, TRANSACTION_FAILURE, TRANSACTION_SUCCESS, UPDATE_SETTINGS } from '../actions/actionTypes';
 import config from '../../config/app';
 
-// I know. This should be camelCased but I just realized it and it's too late for me refactor now
+// I know. This should be camelCased but I just realized it and it's too late for me to refactor now
 const initialState = {
     exchange_refresh_rate: null,
     commission_percentage: null,
